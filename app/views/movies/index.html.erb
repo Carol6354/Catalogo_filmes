@@ -1,0 +1,44 @@
+<% content_for :title, "Movies" %>
+
+<h1>Filmes</h1>
+
+<% if user_signed_in? %>
+  <%= link_to "Novo filme", new_movie_path %>
+<% end %>
+
+<p style="color: green"><%= notice %></p>
+
+<% if @movies.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Título</th>
+        <th scope="col">Gênero</th>
+        <th scope="col">Ano</th>
+        <th scope="col">Classificação</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @movies.each do |movie| %>
+        <tr>
+          <td><%= link_to movie.title, movie %></td>
+          <td><%= movie.genre %></td>
+          <td><%= movie.year %></td>
+          <td><%= movie.rating %></td>
+          <td>
+            <% if user_signed_in? && movie.user == current_user %>
+              <%= link_to "Editar", edit_movie_path(movie) %> |
+              <%= link_to "Apagar", movie, data: { turbo_method: :delete, turbo_confirm: "Apagar?" } %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= paginate @movies %>
+<% else %>
+  <p>Nenhum filme cadastrado ainda.</p>
+<% end %>

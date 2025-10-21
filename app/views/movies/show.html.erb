@@ -1,0 +1,65 @@
+<% content_for :title, @movie.title %>
+
+<h1><%= @movie.title %></h1>
+
+<p><strong>Genre:</strong> <%= @movie.genre %></p>
+<p><strong>Year:</strong> <%= @movie.year %></p>
+<p><strong>Rating:</strong> <%= @movie.rating %></p>
+
+<p style="color: green"><%= notice %></p>
+<p style="color: red"><%= alert %></p>
+
+<hr>
+<h2>Comentários</h2>
+
+<% if @movie.comments.any? %>
+  <ul>
+    <% @movie.comments.each do |comment| %>
+      <li style="margin-bottom: 12px;">
+        <strong><%= comment.user&.display_name || comment.name %></strong>
+        <small>
+          — <%= l(comment.created_at, format: :short) rescue comment.created_at.strftime("%d/%m/%Y %H:%M") %>
+        </small>
+        <br>
+        <%= simple_format(comment.content) %>
+
+        <% if user_signed_in? && (comment.user == current_user || @movie.user == current_user) %>
+          <%= link_to "Remover",
+                movie_comment_path(@movie, comment),
+                data: { turbo_method: :delete, turbo_confirm: "Remover comentário?" } %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>Sem comentários ainda.</p>
+<% end %>
+
+<hr>
+<h3>Novo comentário</h3>
+
+<%= form_with(model: [@movie, Comment.new], local: true) do |f| %>
+  <% unless user_signed_in? %>
+    <div style="margin-bottom: 8px;">
+      <%= f.label :name, "Seu nome" %><br>
+      <%= f.text_field :name %>
+    </div>
+  <% else %>
+    <p>Comentando como <strong><%= current_user.display_name || current_user.email %></strong></p>
+  <% end %>
+
+  <div style="margin-bottom: 8px;">
+    <%= f.label :content, "Mensagem" %><br>
+    <%= f.text_area :content, rows: 4 %>
+  </div>
+
+  <%= f.submit "Publicar" %>
+<% end %>
+
+<hr>
+
+<%= link_to "Voltar", movies_path %>
+<% if user_signed_in? && @movie.user == current_user %>
+  | <%= link_to "Editar", edit_movie_path(@movie) %>
+  | <%= link_to "Apagar", @movie, data: { turbo_method: :delete, turbo_confirm: "Apagar filme?" } %>
+<% end %>
