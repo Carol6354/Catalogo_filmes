@@ -1,24 +1,30 @@
 # README
+Catálogo de Filmes – Rails 8
+Aplicação web para cadastro e consulta de filmes com autenticação, upload de pôsteres, categorias, busca e comentários.
+- Ruby 3.4.7
+- Rails 8.0.3
+- PostgreSQL
+- Devise
+- Active Storage
+- Deploy: https://catalogo-filmes.onrender.com
+- Repositório: https://github.com/Carol6354/Catalogo_filmes
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Funcionalidades
+- Cadastro e login de usuários
+- CRUD de filmes com pôster
+- Categorias N:N
+- Comentários
+- Busca por título, gênero, diretor e categoria
+- Autorização por dono do conteúdo
 
-Things you may want to cover:
+Instalação
+git clone https://github.com/Carol6354/Catalogo_filmes.git
+cd Catalogo_filmes
+bundle install
+rails db:create db:migrate db:seed
+rails s
 
-* Ruby version
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Acesse: http://localhost:3000
+Uploads: Active Storage local por padrão. Pode ser configurado para S3 ou Cloudinary.
+Estrutura: MVC padrão com controllers, models, views e assets organizados.
