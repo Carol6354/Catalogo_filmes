@@ -1,44 +1,111 @@
-<% content_for :title, "Movies" %>
-
 <h1>Filmes</h1>
 
-<% if user_signed_in? %>
-  <%= link_to "Novo filme", new_movie_path %>
-<% end %>
+<style>
+  h1 {
+    text-align: center;
+    font-size: 42px;
+    color: #c837c8;
+    margin-top: 40px;
+    margin-bottom: 30px;
+    font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  }
 
-<p style="color: green"><%= notice %></p>
+  .carousel-container {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
 
-<% if @movies.any? %>
-  <table>
-    <thead>
-      <tr>
-        <th scope="col">Título</th>
-        <th scope="col">Gênero</th>
-        <th scope="col">Ano</th>
-        <th scope="col">Classificação</th>
-        <th scope="col"></th>
-      </tr>
-    </thead>
+  .carousel-track {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
 
-    <tbody>
-      <% @movies.each do |movie| %>
-        <tr>
-          <td><%= link_to movie.title, movie %></td>
-          <td><%= movie.genre %></td>
-          <td><%= movie.year %></td>
-          <td><%= movie.rating %></td>
-          <td>
-            <% if user_signed_in? && movie.user == current_user %>
-              <%= link_to "Editar", edit_movie_path(movie) %> |
-              <%= link_to "Apagar", movie, data: { turbo_method: :delete, turbo_confirm: "Apagar?" } %>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+  .movie-card {
+    width: 300px;
+    background-color: #111;
+    border-radius: 8px;
+    overflow: hidden;
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+  }
 
-  <%= paginate @movies %>
-<% else %>
-  <p>Nenhum filme cadastrado ainda.</p>
-<% end %>
+  .movie-poster {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .movie-info {
+    padding: 10px;
+  }
+
+  .movie-meta {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .movie-director {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+
+  .movie-btn {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #c837c8;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+
+  /* Responsividade opcional */
+  @media (max-width: 1200px) {
+    .movie-card {
+      width: 45%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .movie-card {
+      width: 100%;
+    }
+  }
+</style>
+
+<div class="carousel-container">
+  <div class="carousel-track">
+    <% @movies.each do |movie| %>
+      <div class="movie-card">
+        <% if movie.poster.attached? %>
+          <%= image_tag movie.poster, alt: movie.title, class: "movie-poster" %>
+        <% else %>
+          <%= image_tag "https://via.placeholder.com/300x450/cccccc/000000?text=Sem+Imagem",
+              alt: "Sem imagem",
+              class: "movie-poster" %>
+        <% end %>
+
+        <div class="movie-info">
+          <p class="movie-meta">
+            <%= movie.genre %> /
+            <%= movie.categories.map(&:name).join(", ") %> /
+            <%= movie.duration %>’ /
+            <%= movie.year %>
+          </p>
+          <p class="movie-director">Direção: <%= movie.director %></p>
+          <%= link_to "SAIBA MAIS", movie_path(movie), class: "movie-btn" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+

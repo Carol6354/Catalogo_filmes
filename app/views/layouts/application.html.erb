@@ -1,31 +1,109 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title><%= content_for(:title) || "Catalogo Filmes" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<head>
+  <title><%= content_for(:title) || "Catálogo de Filmes" %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
 
-    <%= yield :head %>
+  <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="alternate icon" href="/icon.png" type="image/png">
+  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-straight/css/uicons-regular-straight.css">
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= stylesheet_link_tag 'devise', media: 'all' %>
+  <%= javascript_importmap_tags %>
+</head>
+<% if notice.present? %>
+  <p class="notice"><%= notice %></p>
+<% end %>
+<% if alert.present? %>
+  <p class="alert"><%= alert %></p>
+<% end %>
+<header class="site-header">
+  <div class="wrapper">
+    <div class="wrapper2">
+      <a class="logo" href="<%= root_path %>">
+        <h1>Catálogo de Filmes</h1>
+      </a>
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-  </head>
+      <div class="bt-menu" id="bt-menu">
+        <hr><hr><hr>
+      </div>
 
-  <body>
-  <p class="notice" style="color: green;"><%= notice %></p>
-  <p class="alert" style="color: red;"><%= alert %></p>
+      <div class="link-group" id="link-group">
+        <nav class="menu">
+          <ul class="parent">
+            <% if user_signed_in? %>
+              <li><%= link_to "Novo Filme", new_movie_path, class: "no-child" %></li>
+            <% end %>
 
+            <li class="hover-me">
+              <span class="parent-item">Filmes</span>
+              <ul class="child">
+                <li class="child-item"><%= link_to "Catálogo", movies_path %></li>
+                <% if user_signed_in? %>
+                  <li class="child-item"><%= link_to "Meus Filmes", movies_path(user_id: current_user.id) %></li>
+                <% end %>
+              </ul>
+            </li>
+
+            <% if user_signed_in? %>
+              <li class="hover-me">
+                <span class="parent-item">Conta</span>
+                <ul class="child">
+                  <li class="child-item"><%= link_to "Perfil", edit_user_registration_path %></li>
+                  <li class="child-item"><%= link_to "Sair", destroy_user_session_path, data: { turbo_method: :delete } %></li>
+                </ul>
+              </li>
+            <% else %>
+              <li><%= link_to "Entrar", new_user_session_path, class: "no-child" %></li>
+              <li><%= link_to "Cadastrar", new_user_registration_path, class: "no-child" %></li>
+            <% end %>
+          </ul>
+        </nav>
+        <br>
+      </div>
+
+      <div class="form-busca">
+        <%= form_with url: movies_path, method: :get, local: true, class: "search-form" do |form| %>
+          <%= form.text_field :query, placeholder: "Buscar...", class: "search-input" %>
+          <button type="submit" class="search-btn">
+            <i class="fi fi-rs-search" aria-hidden="true"></i>
+          </button>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</header>
+<main class="content">
   <%= yield %>
-</body>
-</html>
+</main>
+<footer>
+  Copyright 2025 © - GameReview™
+</footer>
+<script defer>
+  document.addEventListener("DOMContentLoaded", function () {
+    const track = document.querySelector(".carousel-track");
+    if (track) {
+      const cardWidth = 300 + 40;
+      const groupSize = 6;
+
+      document.querySelector(".carousel-btn.left").addEventListener("click", () => {
+        track.scrollBy({ left: -cardWidth * groupSize, behavior: "smooth" });
+      });
+
+      document.querySelector(".carousel-btn.right").addEventListener("click", () => {
+        track.scrollBy({ left: cardWidth * groupSize, behavior: "smooth" });
+      });
+    }
+
+    const menuBtn = document.getElementById("bt-menu");
+    const linkGroup = document.getElementById("link-group");
+    menuBtn.addEventListener("click", function () {
+      linkGroup.classList.toggle("active");
+    });
+  });
+</script>

@@ -2,7 +2,6 @@
   <% if movie.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(movie.errors.count, "error") %> prohibited this movie from being saved:</h2>
-
       <ul>
         <% movie.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -11,9 +10,22 @@
     </div>
   <% end %>
 
+  <div class="field">
+    <%= form.label :poster, "Pôster" %><br>
+    <%= form.file_field :poster, accept: "image/*" %>
+  </div>
+
   <div>
     <%= form.label :title, style: "display: block" %>
     <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :category_ids, "Categorias" %><br>
+    <%= form.collection_select :category_ids,
+                               Category.order(:name), :id, :name,
+                               { include_hidden: false },
+                               { multiple: true, size: 6 } %>
   </div>
 
   <div>
@@ -29,6 +41,21 @@
   <div>
     <%= form.label :rating, style: "display: block" %>
     <%= form.text_field :rating %>
+  </div>
+
+  <div>
+    <%= form.label :director, "Diretor" %><br>
+    <%= form.text_field :director %>
+  </div>
+
+  <div>
+    <%= form.label :duration, "Duração (minutos)" %><br>
+    <%= form.number_field :duration %>
+  </div>
+
+  <div>
+    <%= form.label :synopsis, "Sinopse" %><br>
+    <%= form.text_area :synopsis, rows: 4 %>
   </div>
 
   <div>

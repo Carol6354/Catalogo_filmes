@@ -2,19 +2,28 @@
 
 <h1><%= @movie.title %></h1>
 
+<% if @movie.poster.attached? %>
+  <%= image_tag @movie.poster, alt: @movie.title, style: "max-width: 400px; margin-bottom: 16px; border-radius: 10px;" %>
+<% end %>
+
 <p><strong>Genre:</strong> <%= @movie.genre %></p>
+<p><strong>Categorias:</strong> <%= @movie.categories.map(&:name).join(", ") %></p>
 <p><strong>Year:</strong> <%= @movie.year %></p>
 <p><strong>Rating:</strong> <%= @movie.rating %></p>
+<p><strong>Diretor:</strong> <%= @movie.director %></p>
+<p><strong>Duração:</strong> <%= @movie.duration %> min</p>
+<p><strong>Sinopse:</strong> <%= simple_format(@movie.synopsis) %></p>
 
 <p style="color: green"><%= notice %></p>
 <p style="color: red"><%= alert %></p>
 
 <hr>
+
 <h2>Comentários</h2>
 
 <% if @movie.comments.any? %>
   <ul>
-    <% @movie.comments.each do |comment| %>
+    <% @comments.each do |comment| %>
       <li style="margin-bottom: 12px;">
         <strong><%= comment.user&.display_name || comment.name %></strong>
         <small>
@@ -36,6 +45,7 @@
 <% end %>
 
 <hr>
+
 <h3>Novo comentário</h3>
 
 <%= form_with(model: [@movie, Comment.new], local: true) do |f| %>
@@ -63,3 +73,6 @@
   | <%= link_to "Editar", edit_movie_path(@movie) %>
   | <%= link_to "Apagar", @movie, data: { turbo_method: :delete, turbo_confirm: "Apagar filme?" } %>
 <% end %>
+
+
+

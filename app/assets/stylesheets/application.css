@@ -1,10 +1,157 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+
+body {
+  margin: 0;
+  font-family: "Patrick Hand", cursive, sans-serif;
+  background-color: #000;
+  color: #fff;
+  height: auto;
+  min-height: 100%;
+  overflow-y: auto;
+
+}
+
+.notice { color: #00c853; text-align: center; margin: 10px 0; }
+.alert { color: #ff5252; text-align: center; margin: 10px 0; }
+
+
+.site-header {
+  background-color: #000;
+  padding: 10px 0;
+  border-bottom: 2px solid #c837c8;
+}
+
+.wrapper {
+  width: 90%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: visible;
+}
+
+.wrapper2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.logo h1 {
+  font-size: 24px;
+  margin: 0;
+  color: #fff;
+}
+
+
+.menu ul.parent {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 20px;
+}
+
+.menu .parent-item, .menu a.no-child {
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.menu .parent-item:hover, .menu a:hover {
+  color: #c837c8;
+
+}
+
+.menu ul.child {
+  display: none;
+  position: absolute;
+  background-color: #111;
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+  border-radius: 8px;
+}
+
+.hover-me:hover .child {
+  display: block;
+}
+
+.child-item a {
+  color: #fff;
+  text-decoration: none;
+  display: block;
+  padding: 6px 12px;
+}
+
+.child-item a:hover {
+  color: #fff;
+  background-color: #c837c8;
+}
+
+.form-busca {
+  margin-left: 20px;
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+  background-color: #c837c8;
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.search-input {
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  width: 95%
+}
+
+.search-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 20px;
+  margin-left: 7px
+}
+
+.bt-menu {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.bt-menu hr {
+  width: 24px;
+  border: 1px solid #fff;
+}
+
+footer{
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #c837c8;
+  color: #ffffff;
+  box-sizing: border-box;
+}
+
+
+@media (max-width: 768px) {
+  .bt-menu { display: flex; }
+  .link-group {
+    display: none;
+    flex-direction: column;
+    background: #000;
+    width: 100%;
+    text-align: center;
+  }
+  .link-group.active { display: flex; }
+  .menu ul.parent { flex-direction: column; }
+  .form-busca { margin: 10px 0; }
+}
+

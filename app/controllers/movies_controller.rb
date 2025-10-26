@@ -5,11 +5,29 @@ class MoviesController < ApplicationController
 
   # GET /movies
   def index
-    @movies = Movie.order(created_at: :desc).page(params[:page]).per(6)
+    @movies = Movie.includes(:categories).order(created_at: :desc)
+
+    if params[:query].present?
+      q = "%#{params[:query].to_s.strip}%"
+      @movies = @movies
+        .joins("LEFT JOIN categories_movies ON categories_movies.movie_id = movies.id")
+        .joins("LEFT JOIN categories ON categories.id = categories_movies.category_id")
+        .where(
+          "movies.title ILIKE :q
+           OR movies.genre ILIKE :q
+           OR movies.director ILIKE :q
+           OR categories.name ILIKE :q",
+          q: q
+        ).distinct
+    end
+
+    @movies = @movies.page(params[:page]).per(6)
   end
+
 
   # GET /movies/1
   def show
+    @comments = @movie.comments.order(created_at: :desc)
   end
 
   # GET /movies/new
@@ -18,8 +36,7 @@ class MoviesController < ApplicationController
   end
 
   # GET /movies/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /movies
   def create
@@ -63,6 +80,9 @@ class MoviesController < ApplicationController
   end
 
   def movie_params
-    params.require(:movie).permit(:title, :genre, :year, :rating)
+    params.require(:movie).permit(
+      :title, :genre, :year, :rating, :director, :duration, :synopsis, :poster,
+      category_ids: []
+    )
   end
 end
