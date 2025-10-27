@@ -40,4 +40,7 @@ queue:
   <<: *default
   database: <%= ENV.fetch("DATABASE_URL", "").sub(%r{/[^/]+$}, '/queue') %>
 
+cache:
+  <<: *default
+  database: <%= ENV.fetch("DATABASE_URL", "").sub(%r{/[^/]+$}, '/cache') %>
 
